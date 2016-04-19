@@ -1,0 +1,23 @@
+{
+	"ImportPath": "github.com/taddgiles/platform-test-go",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v62",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/auth0/go-jwt-middleware",
+			"Rev": "731fd2f34fda4c4a7c22816f2167e2d310cb1e42"
+		},
+		{
+			"ImportPath": "github.com/dgrijalva/jwt-go",
+			"Comment": "v2.6.0",
+			"Rev": "a2c85815a77d0f951e33ba4db5ae93629a1530af"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "1ea25387ff6f684839d82767c1733ff4d4d15d0a"
+		}
+	]
+}
