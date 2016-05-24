@@ -2,9 +2,10 @@ package main
 
 import (
   "os"
-  // "log"
+  "log"
 
-  "github.com/taddgiles/platform-test-go/db"
+  "database/sql"
+  _ "github.com/lib/pq"
   "github.com/gin-gonic/gin"
 )
 
@@ -12,40 +13,21 @@ const (
   Port = "3000"
 )
 
-type User struct {
-  Name string
-  Email string
-}
-
-func init() {
-  db.Connect()
-}
-
 func main() {
+  dbUrl := os.Getenv("DATABASE_URL")
+  if dbUrl == "" {
+    dbUrl = "postgres://localhost/platform_test_development"
+  }
+
+  db, err := sql.Open("postgres", dbUrl + "?sslmode=disable")
+  if err != nil {
+    log.Fatal(err)
+  }
+
   jwtsecret := os.Getenv("JWT_SECRET")
   if jwtsecret == "" {
     jwtsecret = "secret"
   }
-
-  // db := os.Getenv("MONGODB_URI")
-  // if db == "" {
-  //   db = "localhost"
-  // }
-
-  // session, err := mgo.Dial(db)
-  // if err != nil {
-  //   panic(err)
-  // }
-  // defer session.Close()
-
-  // users := session.DB("platform-test").C("users")
-  // err = c.Insert(&User{"Ale", "whatnow@email.com"},
-  //          &User{"Cla", "whatnow2@email.com"})
-  // if err != nil {
-  //   log.Fatal(err)
-  // }
-
-  // result := User{}
 
 
   router := gin.Default()
@@ -56,19 +38,25 @@ func main() {
     })
   })
 
-  router.POST("/authenticate", func(c *gin.Context) {
-    // email := c.Query("email")
-    // password := c.Query("password")
+  router.GET("/api/v1/users/current", func(c *gin.Context) {
+    id := 1
 
-    // err = users.Find(bson.M{"email": String(email)}).One(&result)
-    // if err != nil {
-    //   log.Fatal(err)
-    // }
-    // log.Printf("Email:", result)
-
-    c.JSON(200, gin.H{
-      "message": "ok",
-    })
+    var email string
+    var name string
+    err := db.QueryRow("SELECT email,name FROM users WHERE id=$1", id).Scan(&email, &name)
+    switch {
+    case err == sql.ErrNoRows:
+      c.JSON(401, gin.H{
+        "message": "No user with that ID",
+      })
+    case err != nil:
+      log.Fatal(err)
+    default:
+      c.JSON(200, gin.H{
+        "email": email,
+        "name": name,
+      })
+    }
   })
 
 // Start listening
