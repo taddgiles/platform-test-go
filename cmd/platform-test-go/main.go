@@ -47,6 +47,7 @@ func main() {
 
   // result := User{}
 
+
   router := gin.Default()
 
   router.GET("/", func(c *gin.Context) {
