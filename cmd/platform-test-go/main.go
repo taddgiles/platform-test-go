@@ -7,6 +7,7 @@ import (
   "database/sql"
   _ "github.com/lib/pq"
   "github.com/gin-gonic/gin"
+  "github.com/dgrijalva/jwt-go"
 )
 
 const (
@@ -29,7 +30,6 @@ func main() {
     jwtsecret = "secret"
   }
 
-
   router := gin.Default()
 
   router.GET("/", func(c *gin.Context) {
@@ -39,11 +39,26 @@ func main() {
   })
 
   router.GET("/api/v1/users/current", func(c *gin.Context) {
-    id := 1
+    var bearer string
+    var user_id string
+
+    bearer = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMTMyMzQifQ.PtGFyxmp1RauCGXXCwh7fm2KAsopYjXG4wLLCHYhDx4"
+
+    token, jwterr := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
+      return []byte(jwtsecret), nil
+    })
+
+    if jwterr == nil && token.Valid {
+      user_id = token.Claims["user_id"].(string)
+    } else {
+      c.JSON(401, gin.H{
+        "message": "Invalid",
+      })
+    }
 
     var email string
     var name string
-    err := db.QueryRow("SELECT email,name FROM users WHERE id=$1", id).Scan(&email, &name)
+    err := db.QueryRow("SELECT email,name FROM users WHERE id=$1", user_id).Scan(&email, &name)
     switch {
     case err == sql.ErrNoRows:
       c.JSON(401, gin.H{
