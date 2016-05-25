@@ -39,7 +39,7 @@ func main() {
     })
   })
 
-  router.GET("/loaderio-c6b9e7b90d19f9d6123be11389320bcc", func(c *gin.Context) {
+  router.GET("/loaderio-c6b9e7b90d19f9d6123be11389320bcc/", func(c *gin.Context) {
     c.String(200, "loaderio-c6b9e7b90d19f9d6123be11389320bcc")
   })
 
