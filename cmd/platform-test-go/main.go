@@ -3,6 +3,7 @@ package main
 import (
   "os"
   "log"
+  "strings"
 
   "database/sql"
   _ "github.com/lib/pq"
@@ -39,12 +40,12 @@ func main() {
   })
 
   router.GET("/api/v1/users/current", func(c *gin.Context) {
-    var bearer string
+    authorizationHeader := c.Request.Header.Get("Authorization")
+    bearerToken := strings.Split(authorizationHeader, " ")[1]
+
     var user_id string
 
-    bearer = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMzIzNDMifQ.h3PHIwuOnLk1rbqYbA_pP13FrGi6q8uw5ETtA5awj7E"
-
-    token, jwterr := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
+    token, jwterr := jwt.Parse(bearerToken, func(token *jwt.Token) (interface{}, error) {
       return []byte(jwtsecret), nil
     })
 
