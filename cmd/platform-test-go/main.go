@@ -42,7 +42,7 @@ func main() {
     var bearer string
     var user_id string
 
-    bearer = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMTMyMzQifQ.PtGFyxmp1RauCGXXCwh7fm2KAsopYjXG4wLLCHYhDx4"
+    bearer = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMzIzNDMifQ.h3PHIwuOnLk1rbqYbA_pP13FrGi6q8uw5ETtA5awj7E"
 
     token, jwterr := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
       return []byte(jwtsecret), nil
