@@ -60,7 +60,7 @@ func main() {
     var name string
     var created_at string
     var updated_at string
-    err := db.QueryRow("SELECT email,name FROM users WHERE id=$1", user_id).Scan(&email, &name, &created_at, &updated_at)
+    err := db.QueryRow("SELECT email,name,created_at,updated_at FROM users WHERE id=$1", user_id).Scan(&email, &name, &created_at, &updated_at)
     switch {
     case err == sql.ErrNoRows:
       c.JSON(401, gin.H{
