@@ -39,6 +39,10 @@ func main() {
     })
   })
 
+  router.GET("/loaderio-c6b9e7b90d19f9d6123be11389320bcc", func(c *gin.Context) {
+    c.String(200, "loaderio-c6b9e7b90d19f9d6123be11389320bcc")
+  })
+
   router.GET("/api/v1/users/current", func(c *gin.Context) {
     authorizationHeader := c.Request.Header.Get("Authorization")
     bearerToken := strings.Split(authorizationHeader, " ")[1]
