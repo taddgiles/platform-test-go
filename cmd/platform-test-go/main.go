@@ -26,6 +26,8 @@ func main() {
     log.Fatal(err)
   }
 
+  db.SetMaxOpenConns(1)
+
   jwtsecret := os.Getenv("JWT_SECRET")
   if jwtsecret == "" {
     jwtsecret = "secret"
