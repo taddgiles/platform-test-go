@@ -58,7 +58,9 @@ func main() {
 
     var email string
     var name string
-    err := db.QueryRow("SELECT email,name FROM users WHERE id=$1", user_id).Scan(&email, &name)
+    var created_at string
+    var updated_at string
+    err := db.QueryRow("SELECT email,name FROM users WHERE id=$1", user_id).Scan(&email, &name, &created_at, &updated_at)
     switch {
     case err == sql.ErrNoRows:
       c.JSON(401, gin.H{
@@ -70,6 +72,8 @@ func main() {
       c.JSON(200, gin.H{
         "email": email,
         "name": name,
+        "created_at": created_at,
+        "updated_at": updated_at,
       })
     }
   })
